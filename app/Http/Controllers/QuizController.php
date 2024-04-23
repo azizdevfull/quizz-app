@@ -13,7 +13,7 @@ class QuizController extends Controller
      */
     public function index()
     {
-        $quizzes = Quiz::all();
+        $quizzes = Quiz::latest()->get();
 
         return view('quizzes.index', compact('quizzes'));
     }
