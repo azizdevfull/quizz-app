@@ -13,7 +13,7 @@ class QuestionController extends Controller
      */
     public function index(Quiz $quiz)
     {
-        $questions = $quiz->questions;
+        $questions = $quiz->questions()->latest()->get();
 
         return view('questions.index', compact('quiz', 'questions'));
     }

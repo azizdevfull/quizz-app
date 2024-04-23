@@ -1,31 +1,33 @@
 <x-app-layout>
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold">{{ $quiz->title }} Questions</h1>
+        <a href="{{ route('quizzes.show', $quiz->id) }}"
+            class="inline-block bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-blue-600">Back to Quiz</a>
+        <a href="{{ route('quizzes.questions.create', $quiz->id) }}"
+            class="inline-block bg-green-500 text-white px-4 py-2 rounded mt-4 ml-4 hover:bg-green-600">Add Question</a>
 
-    <div class="container">
-        <h1>{{ $quiz->title }} Questions</h1>
-        <a class="btn btn-primary" href="{{ route('quizzes.show', $quiz->id) }}">Back to Quiz</a>
-        <a class="btn btn-success" href="{{ route('quizzes.questions.create', $quiz->id) }}">Add Question</a>
-
-        <table class="table mt-4">
+        <table class="table-auto w-full mt-4">
             <thead>
                 <tr>
-                    <th>Question</th>
-                    <th>Actions</th>
+                    <th class="px-4 py-2">Question</th>
+                    <th class="px-4 py-2">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($questions as $question)
                     <tr>
-                        <td>{{ $question->question }}</td>
-                        <td>
+                        <td class="border px-4 py-2 text-center">{{ $question->question }}</td>
+                        <td class="border px-4 py-2 text-center">
                             <a href="{{ route('quizzes.questions.show', [$quiz->id, $question->id]) }}"
-                                class="btn btn-info">View</a>
+                                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</a>
                             <a href="{{ route('quizzes.questions.edit', [$quiz->id, $question->id]) }}"
-                                class="btn btn-primary">Edit</a>
+                                class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 ml-2">Edit</a>
                             <form action="{{ route('quizzes.questions.destroy', [$quiz->id, $question->id]) }}"
-                                method="POST" style="display: inline-block;">
+                                method="POST" class="inline-block">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger"
+                                <button type="submit"
+                                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 ml-2"
                                     onclick="return confirm('Are you sure you want to delete this question?')">Delete</button>
                             </form>
                         </td>
