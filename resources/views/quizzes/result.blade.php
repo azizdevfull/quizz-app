@@ -1,6 +1,7 @@
 <x-app-layout>
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold mb-8 text-center">Quiz Result</h1>
+        <h3 class="text-3xl font-bold mb-8 text-center">Score {{ $score }}%</h3>
 
         <table class="w-full border-collapse border border-gray-300">
             <thead>

@@ -94,14 +94,15 @@ class QuizController extends Controller
                 'correct_answer' => $question->solution,
             ];
         }
+        $score = round(($totalScore / $quiz->questions->count()) * 100, 2);
 
         // Redirect to the result view with quiz data
-        return $this->result($quiz, $totalScore, count($questions), $userAnswers);
+        return $this->result($quiz, count($questions), $userAnswers, $score);
     }
 
 
-    public function result(Quiz $quiz, $score, $totalQuestions, $userAnswers)
+    public function result(Quiz $quiz, $totalQuestions, $userAnswers, $score)
     {
-        return view('quizzes.result', compact('quiz', 'score', 'totalQuestions', 'userAnswers'));
+        return view('quizzes.result', compact('quiz', 'totalQuestions', 'userAnswers', 'score'));
     }
 }
