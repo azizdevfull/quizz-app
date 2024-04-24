@@ -99,15 +99,7 @@ class QuizController extends Controller
         return $this->result($quiz, $totalScore, count($questions), $userAnswers);
     }
 
-    /**
-     * Display the result of the solved quiz.
-     *
-     * @param Quiz $quiz
-     * @param int $score
-     * @param int $totalQuestions
-     * @param array $userAnswers
-     * @return \Illuminate\View\View
-     */
+
     public function result(Quiz $quiz, $score, $totalQuestions, $userAnswers)
     {
         return view('quizzes.result', compact('quiz', 'score', 'totalQuestions', 'userAnswers'));
