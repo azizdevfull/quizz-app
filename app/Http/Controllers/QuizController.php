@@ -73,20 +73,43 @@ class QuizController extends Controller
 
     public function submit(Request $request, Quiz $quiz)
     {
-        $answers = $request->except('_token');
-        $correctCount = 0;
-        $questions = $quiz->questions; // Retrieve questions for the quiz
+        $questions = $quiz->questions; // Retrieve questions associated with the quiz
+        $totalScore = 0;
+        $userAnswers = [];
 
-        foreach ($answers as $questionId => $answer) {
-            $question = Question::findOrFail($questionId);
+        // Loop through each question
+        foreach ($questions as $question) {
+            $questionId = $question->id;
+            $submittedAnswer = $request->input($questionId); // Get the user's selected answer for the question
 
-            if ($question->solution == $answer) {
-                $correctCount++;
+            // Check if the submitted answer matches the correct solution
+            if ($submittedAnswer == $question->solution) {
+                $totalScore++; // Increment score for correct answer
             }
+
+            // Store user's answer for each question
+            $userAnswers[$questionId] = [
+                'question' => $question->question,
+                'submitted_answer' => $submittedAnswer,
+                'correct_answer' => $question->solution,
+            ];
         }
 
-        $score = round(($correctCount / $quiz->questions->count()) * 100, 2);
+        // Redirect to the result view with quiz data
+        return $this->result($quiz, $totalScore, count($questions), $userAnswers);
+    }
 
-        return view('quizzes.result', compact('quiz', 'score', 'questions', 'answers'));
+    /**
+     * Display the result of the solved quiz.
+     *
+     * @param Quiz $quiz
+     * @param int $score
+     * @param int $totalQuestions
+     * @param array $userAnswers
+     * @return \Illuminate\View\View
+     */
+    public function result(Quiz $quiz, $score, $totalQuestions, $userAnswers)
+    {
+        return view('quizzes.result', compact('quiz', 'score', 'totalQuestions', 'userAnswers'));
     }
 }
