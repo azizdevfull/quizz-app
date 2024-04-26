@@ -1,14 +1,14 @@
 <x-app-layout>
     <div class="container mx-auto px-4 py-8">
         <div class="mb-4">
-            <a href="{{ route('quizzes.questions.index', $quiz->id) }}"
+            <a href="{{ route('admin.quizzes.questions.index', $quiz->id) }}"
                 class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-4">Back to
                 Quizzes</a>
         </div>
 
         <h1 class="text-2xl font-bold mb-4">Edit Question</h1>
 
-        <form action="{{ route('quizzes.questions.update', [$quiz->id, $question->id]) }}" method="POST">
+        <form action="{{ route('admin.quizzes.questions.update', [$quiz->id, $question->id]) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="mb-4">
