@@ -9,6 +9,6 @@
             <li>Answer 4: {{ $question->answer4 }}</li>
         </ul>
         <p>Solution: {{ $question->solution }}</p>
-        <a class="btn btn-primary" href="{{ route('quizzes.questions.index', $quiz->id) }}">Back to Questions</a>
+        <a class="btn btn-primary" href="{{ route('admin.quizzes.questions.index', $quiz->id) }}">Back to Questions</a>
     </div>
 </x-app-layout>

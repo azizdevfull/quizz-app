@@ -1,10 +1,11 @@
 <x-app-layout>
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-2xl font-bold mb-4">Add Question</h1>
-        <a href="{{ route('quizzes.questions.index', $quiz->id) }}" class=" text-blue-500 font-bold py-2 px-4 rounded">
+        <a href="{{ route('admin.quizzes.questions.index', $quiz->id) }}"
+            class=" text-blue-500 font-bold py-2 px-4 rounded">
             Back
         </a>
-        <form action="{{ route('quizzes.questions.store', $quiz->id) }}" method="POST">
+        <form action="{{ route('admin.quizzes.questions.store', $quiz->id) }}" method="POST">
             @csrf
             <div class="mb-4">
                 <label for="question" class="block text-sm font-medium text-gray-700">Question</label>
