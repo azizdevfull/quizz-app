@@ -13,7 +13,7 @@ class QuizController extends Controller
      */
     public function index()
     {
-        $quizzes = Quiz::latest()->get();
+        $quizzes = Quiz::latest()->paginate(5);
 
         return view('admin.quizzes.index', compact('quizzes'));
     }

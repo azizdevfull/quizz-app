@@ -116,37 +116,7 @@
                                                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</button>
                                             </form>
                                         </td>
-                                        {{-- <td
-                                            class="px-4 py-4 text-sm text-gray-500 light:text-gray-300 whitespace-nowrap">
-                                            <div class="flex items-center gap-x-2">
-                                                <img class="object-cover w-8 h-8 rounded-full"
-                                                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                                                    alt="">
-                                                <div>
-                                                    <h2 class="text-sm font-medium text-gray-800 light:text-white ">
-                                                        Arthur
-                                                        Melo</h2>
-                                                    <p class="text-xs font-normal text-gray-600 light:text-gray-400">
-                                                        authurmelo@example.com</p>
-                                                </div>
-                                            </div>
-                                        </td> --}}
-                                        {{-- <td
-                                            class="px-4 py-4 text-sm text-gray-500 light:text-gray-300 whitespace-nowrap">
-                                            Monthly subscription</td> --}}
-                                        {{-- <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                            <div class="flex items-center gap-x-6">
-                                                <button
-                                                    class="text-gray-500 transition-colors duration-200 light:hover:text-indigo-500 light:text-gray-300 hover:text-indigo-500 focus:outline-none">
-                                                    Archive
-                                                </button>
 
-                                                <button
-                                                    class="text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none">
-                                                    Download
-                                                </button>
-                                            </div>
-                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -155,49 +125,69 @@
                 </div>
             </div>
         </div>
+        {{-- Check if there are multiple pages to display --}}
+        @if ($quizzes->lastPage() > 1)
+            <div class="flex items-center justify-between mt-6">
+                {{-- Previous Page Link --}}
+                @if ($quizzes->onFirstPage())
+                    <span class="px-5 py-2 text-sm text-gray-400 bg-white border rounded-md cursor-not-allowed">
+                        <span class="flex items-center gap-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                            </svg>
+                            <span>Previous</span>
+                        </span>
+                    </span>
+                @else
+                    <a href="{{ $quizzes->previousPageUrl() }}"
+                        class="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 light:bg-gray-900 light:text-gray-200 light:border-gray-700 light:hover:bg-gray-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            class="w-5 h-5 rtl:-scale-x-100">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                        </svg>
+                        <span>Previous</span>
+                    </a>
+                @endif
 
-        <div class="flex items-center justify-between mt-6">
-            <a href="#"
-                class="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 light:bg-gray-900 light:text-gray-200 light:border-gray-700 light:hover:bg-gray-800">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                </svg>
+                {{-- Pagination Links --}}
+                <div class="flex items-center gap-x-3">
+                    @for ($i = 1; $i <= $quizzes->lastPage(); $i++)
+                        <a href="{{ $quizzes->url($i) }}"
+                            class="px-2 py-1 text-sm rounded-md {{ $quizzes->currentPage() === $i ? 'text-blue-500 bg-blue-100' : 'text-gray-500 hover:bg-gray-100' }}">
+                            {{ $i }}
+                        </a>
+                    @endfor
+                </div>
 
-                <span>
-                    previous
-                </span>
-            </a>
-
-            <div class="items-center hidden md:flex gap-x-3">
-                <a href="#"
-                    class="px-2 py-1 text-sm text-blue-500 rounded-md light:bg-gray-800 bg-blue-100/60">1</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md light:hover:bg-gray-800 light:text-gray-300 hover:bg-gray-100">2</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md light:hover:bg-gray-800 light:text-gray-300 hover:bg-gray-100">3</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md light:hover:bg-gray-800 light:text-gray-300 hover:bg-gray-100">...</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md light:hover:bg-gray-800 light:text-gray-300 hover:bg-gray-100">12</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md light:hover:bg-gray-800 light:text-gray-300 hover:bg-gray-100">13</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md light:hover:bg-gray-800 light:text-gray-300 hover:bg-gray-100">14</a>
+                {{-- Next Page Link --}}
+                @if ($quizzes->hasMorePages())
+                    <a href="{{ $quizzes->nextPageUrl() }}"
+                        class="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 light:bg-gray-900 light:text-gray-200 light:border-gray-700 light:hover:bg-gray-800">
+                        <span>Next</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            class="w-5 h-5 rtl:-scale-x-100">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                        </svg>
+                    </a>
+                @else
+                    <span class="px-5 py-2 text-sm text-gray-400 bg-white border rounded-md cursor-not-allowed">
+                        <span class="flex items-center gap-x-2">
+                            <span>Next</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                            </svg>
+                        </span>
+                    </span>
+                @endif
             </div>
+        @endif
 
-            <a href="#"
-                class="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 light:bg-gray-900 light:text-gray-200 light:border-gray-700 light:hover:bg-gray-800">
-                <span>
-                    Next
-                </span>
-
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                </svg>
-            </a>
-        </div>
     </section>
 
     <div id="quizModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
