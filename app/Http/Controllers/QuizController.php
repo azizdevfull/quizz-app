@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
 use App\Models\Quiz;
 use App\Models\Question;
 use Illuminate\Http\Request;
@@ -21,31 +22,59 @@ class QuizController extends Controller
 
     public function submit(Request $request, Quiz $quiz)
     {
-        $questions = $quiz->questions; // Retrieve questions associated with the quiz
         $totalScore = 0;
         $userAnswers = [];
 
-        // Loop through each question
-        foreach ($questions as $question) {
+        foreach ($quiz->questions as $question) {
             $questionId = $question->id;
-            $submittedAnswer = $request->input($questionId); // Get the user's selected answer for the question
+            $submittedAnswer = $request->input($questionId);
 
             // Check if the submitted answer matches the correct solution
-            if ($submittedAnswer == $question->solution) {
-                $totalScore++; // Increment score for correct answer
+            $isCorrect = ($submittedAnswer == $question->solution);
+
+            $existingAnswer = Answer::where([
+                'quiz_id' => $quiz->id,
+                'question_id' => $questionId,
+                'user_id' => auth()->id(),
+            ])->first();
+
+            if ($existingAnswer) {
+                // Update the existing answer
+                $existingAnswer->update([
+                    'answer' => $submittedAnswer,
+                    'is_correct' => ($submittedAnswer == $question->solution),
+                ]);
+            } else {
+                // Create a new answer
+                $isCorrect = ($submittedAnswer == $question->solution);
+                $answer = new Answer([
+                    'quiz_id' => $quiz->id,
+                    'question_id' => $questionId,
+                    'user_id' => auth()->id(),
+                    'answer' => $submittedAnswer,
+                    'is_correct' => $isCorrect,
+                ]);
+                $answer->save();
             }
 
-            // Store user's answer for each question
+            // Increment score for correct answers
+            if ($isCorrect) {
+                $totalScore++;
+            }
+
+            // Store user's answer for display in the result view
             $userAnswers[$questionId] = [
                 'question' => $question->question,
                 'submitted_answer' => $submittedAnswer,
                 'correct_answer' => $question->solution,
             ];
         }
+
+        // Calculate score percentage
         $score = round(($totalScore / $quiz->questions->count()) * 100, 2);
 
         // Redirect to the result view with quiz data
-        return $this->result($quiz, count($questions), $userAnswers, $score);
+        return $this->result($quiz, count($quiz->questions), $userAnswers, $score);
     }
 
 

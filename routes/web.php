@@ -6,6 +6,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\Admin\Question\QuestionController as AdminQuestionController;
 // use App\Http\Controllers\Admin\Question\QuestionController as AdminQuestionController;
 use App\Http\Controllers\Admin\Quiz\QuizController as AdminQuizController;
+use App\Http\Controllers\DashboardController as UserDashboardController;
 use App\Http\Controllers\QuizController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('quizzes', QuizController::class);
+Route::get('/answers', [UserDashboardController::class, 'index']);
 Route::get('quizzes/{quiz}/solve', [QuizController::class, 'solve'])->name('quizzes.solve');
 Route::post('quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
 
