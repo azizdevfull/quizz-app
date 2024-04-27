@@ -18,6 +18,7 @@ class Answer extends Model
         'user_id', // ID of the user who submitted the answer (if applicable)
         'answer', // User's submitted answer
         'is_correct', // Flag indicating if the answer is correct
+        'score', // Score awarded for the answer
     ];
 
     // Define relationships if needed (e.g., belongsTo Quiz, belongsTo Question, belongsTo User)

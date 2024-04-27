@@ -7,39 +7,33 @@
         @if ($answersByQuiz->isEmpty())
             <p class="text-center text-gray-600">You haven't submitted any answers yet.</p>
         @else
-            @foreach ($answersByQuiz as $quizId => $answers)
-                @php
-                    $quiz = $answers->first()->quiz;
-                @endphp
-                <h2 class="text-2xl font-bold mb-4">{{ $quiz->title }}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach ($answersByQuiz as $quizId => $answers)
+                    @php
+                        $quiz = $answers->first()->quiz;
+                        $totalQuestions = count($answers);
+                        $totalCorrect = 0;
+                    @endphp
 
-                <table class="w-full border-collapse border border-gray-300 mb-8">
-                    <thead>
-                        <tr class="bg-gray-200">
-                            <th class="py-3 px-6 text-left">Question</th>
-                            <th class="py-3 px-6 text-left">Submitted Answer</th>
-                            <th class="py-3 px-6 text-left">Correct Answer</th>
-                            <th class="py-3 px-6 text-left">Result</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($answers as $answer)
-                            <tr>
-                                <td class="py-4 px-6 border border-gray-300">{{ $answer->question->question }}</td>
-                                <td class="py-4 px-6 border border-gray-300">{{ $answer->answer }}</td>
-                                <td class="py-4 px-6 border border-gray-300">{{ $answer->question->solution }}</td>
-                                <td class="py-4 px-6 border border-gray-300">
-                                    @if ($answer->is_correct)
-                                        <span class="text-green-600 font-semibold">Correct!</span>
-                                    @else
-                                        <span class="text-red-600 font-semibold">Incorrect</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @endforeach
+                    @foreach ($answers as $answer)
+                        @if ($answer->is_correct)
+                            @php $totalCorrect++; @endphp
+                        @endif
+                    @endforeach
+
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-xl font-bold mb-4">{{ $quiz->title }}</h2>
+                        <p class="text-sm text-gray-600 mb-2">Questions: {{ $totalQuestions }}</p>
+                        <p class="text-sm text-gray-600 mb-4">Score:
+                            {{ round(($totalCorrect / $totalQuestions) * 100, 2) }}%</p>
+                        <div class="flex justify-center">
+                            <a href="{{ route('my-answers.show', $quiz->id) }}"
+                                class="text-blue-600 font-semibold hover:text-blue-700 transition duration-300 ease-in-out">View
+                                Answers</a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         @endif
     </div>
 </x-app-layout>

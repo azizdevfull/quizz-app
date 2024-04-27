@@ -32,30 +32,21 @@ class QuizController extends Controller
             // Check if the submitted answer matches the correct solution
             $isCorrect = ($submittedAnswer == $question->solution);
 
-            $existingAnswer = Answer::where([
+            // Retrieve or create the answer record for the current question
+            $answer = Answer::firstOrNew([
                 'quiz_id' => $quiz->id,
                 'question_id' => $questionId,
                 'user_id' => auth()->id(),
-            ])->first();
+            ]);
 
-            if ($existingAnswer) {
-                // Update the existing answer
-                $existingAnswer->update([
-                    'answer' => $submittedAnswer,
-                    'is_correct' => ($submittedAnswer == $question->solution),
-                ]);
-            } else {
-                // Create a new answer
-                $isCorrect = ($submittedAnswer == $question->solution);
-                $answer = new Answer([
-                    'quiz_id' => $quiz->id,
-                    'question_id' => $questionId,
-                    'user_id' => auth()->id(),
-                    'answer' => $submittedAnswer,
-                    'is_correct' => $isCorrect,
-                ]);
-                $answer->save();
-            }
+            // Update the answer details
+            $answer->fill([
+                'answer' => $submittedAnswer,
+                'is_correct' => $isCorrect,
+            ]);
+
+            // Save the answer
+            $answer->save();
 
             // Increment score for correct answers
             if ($isCorrect) {
@@ -71,11 +62,18 @@ class QuizController extends Controller
         }
 
         // Calculate score percentage
-        $score = round(($totalScore / $quiz->questions->count()) * 100, 2);
+        $score = ($totalScore / $quiz->questions->count()) * 100;
+
+        // Set the score property on the last saved answer (if available)
+        if ($answer) {
+            $answer->score = $score;
+            $answer->save();
+        }
 
         // Redirect to the result view with quiz data
-        return $this->result($quiz, count($quiz->questions), $userAnswers, $score);
+        return $this->result($quiz, $quiz->questions->count(), $userAnswers, $score);
     }
+
 
 
     public function result(Quiz $quiz, $totalQuestions, $userAnswers, $score)

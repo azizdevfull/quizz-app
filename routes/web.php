@@ -23,9 +23,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::get('/answers', [UserDashboardController::class, 'index'])->name('my-answers');
+Route::get('/answers/{quizId}', [UserDashboardController::class, 'show'])->name('my-answers.show');
 
 Route::resource('quizzes', QuizController::class);
-Route::get('/answers', [UserDashboardController::class, 'index']);
 Route::get('quizzes/{quiz}/solve', [QuizController::class, 'solve'])->name('quizzes.solve');
 Route::post('quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
 
