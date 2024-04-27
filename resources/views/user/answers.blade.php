@@ -23,7 +23,6 @@
 
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <h2 class="text-xl font-bold mb-4">{{ $quiz->title }}</h2>
-                        <p class="text-sm text-gray-600 mb-2">Questions: {{ $totalQuestions }}</p>
                         <p class="text-sm text-gray-600 mb-4">Score:
                             {{ round(($totalCorrect / $totalQuestions) * 100, 2) }}%</p>
                         <div class="flex justify-center">
